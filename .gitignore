@@ -1,0 +1,107 @@
+Directives for Expense Tracker Project
+
+(Frontend: HTML/CSS/JS | Backend: C# Web API | Database: MongoDB | Editors: VS Code & Visual Studio)
+
+==========================================
+
+C# / .NET / Visual Studio Ignores
+
+==========================================
+
+[Bb]in/
+[Ob]j/
+out/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.appx
+*.appxbundle
+*.appxupload
+
+Build results
+
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]uild/
+
+NuGet Packages
+
+*.nupkg
+/packages/
+!*/packages/build/
+project.lock.json
+project.fragment.lock.json
+obj/
+
+Test Results & Code Coverage
+
+*.trx
+*.coverage
+*.coveragexml
+TestResults/
+
+==========================================
+
+VS Code Ignores
+
+==========================================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+==========================================
+
+Environment & Sensitive Configuration
+
+==========================================
+
+Protect secret keys, connection strings (MongoDB, API keys, etc.)
+
+appsettings.Development.json
+appsettings.Local.json
+*.env
+*.env.local
+.env.development
+.env
+
+==========================================
+
+Frontend (HTML / CSS / JS) & Node.js
+
+==========================================
+
+Ignored in case you use npm/yarn for live-server or minor tooling
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+==========================================
+
+MongoDB & Local Database Storage
+
+==========================================
+
+Local database dumps or data directories
+
+/data/
+/db/
+*.dmp
+*.bson
