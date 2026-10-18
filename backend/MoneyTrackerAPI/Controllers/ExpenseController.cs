@@ -34,4 +34,14 @@ public class ExpenseController : Controller
 
         return Ok(expense);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<Expense>> Post([FromBody] Expense newExpense)
+    {
+        newExpense.Id = string.Empty;
+
+        await _expensesCollection.InsertOneAsync(newExpense);
+
+        return CreatedAtAction(nameof(GetById), new { id = newExpense.Id }, newExpense);
+    }
 }
