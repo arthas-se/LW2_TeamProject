@@ -15,4 +15,11 @@ public class ExpenseController : Controller
     {
         _expensesCollection = mongoClient.GetCollection<Expense>("Expenses");
     }
+
+    public async Task<ActionResult<List<Expense>>> GetAll()
+    {
+        var expenses = await _expensesCollection.Find(_ => true).ToListAsync();
+        return Ok(expenses);
+    }
+
 }
