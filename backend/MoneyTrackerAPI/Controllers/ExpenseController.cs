@@ -44,4 +44,19 @@ public class ExpenseController : Controller
 
         return CreatedAtAction(nameof(GetById), new { id = newExpense.Id }, newExpense);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(string id, [FromBody] Expense updatedExpense)
+    {
+        updatedExpense.Id = id;
+
+        var result = await _expensesCollection.ReplaceOneAsync(x => x.Id == id, updatedExpense);
+
+        if (result.MatchedCount == 0)
+        {
+            return NotFound($"Expense with ID '{id}' not found!");
+        }
+
+        return NoContent();
+    }
 }
