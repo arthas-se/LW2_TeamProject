@@ -22,4 +22,16 @@ public class ExpenseController : Controller
         return Ok(expenses);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Expense>> GetById(string id)
+    {
+        var expense = await _expensesCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+        if (expense is null)
+        {
+            return NotFound($"Expense with ID '{id}' not found!");
+        }
+
+        return Ok(expense);
+    }
 }
