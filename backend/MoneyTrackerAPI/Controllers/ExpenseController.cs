@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MoneyTrackerAPI.Database;
+using MoneyTrackerAPI.Models;
+using MongoDB.Driver;
 
-namespace MoneyTrackerAPI.Controllers
+namespace MoneyTrackerAPI.Controllers;
+
+[ApiController]
+[Route("api/expenses")]
+public class ExpenseController : Controller
 {
-    public class ExpenseController : Controller
+    private readonly IMongoCollection<Expense> _expensesCollection;
+
+    public ExpenseController(MongoDBClient mongoClient)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _expensesCollection = mongoClient.GetCollection<Expense>("Expenses");
     }
 }
