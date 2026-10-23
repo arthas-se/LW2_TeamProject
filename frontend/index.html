@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fino</title>
+  <title>MoneyTracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,15 +11,15 @@
 </head>
 <body>
 
-  <!-- ===== SIDEBAR (fixed, never hides) ===== -->
+    <!-- ===== SIDEBAR (fixed, never hides) ===== -->
   <aside class="sidebar">
     <div class="sidebar__logo">
       <!-- Logo: 40x40 -->
       <img src="" alt="">
     </div>
-
+ 
     <h2 class="sidebar__title">Navigation</h2>
-
+ 
     <nav class="sidebar__nav">
       <a href="#add" class="sidebar__link">
         <!-- Icon: 20x20 -->
@@ -38,6 +38,84 @@
       </a>
     </nav>
   </aside>
+ 
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main">
+ 
+    <!-- Balance -->
+    <section class="balance-section">
+      <header class="page-header">
+        <h1 class="page-title">My balance</h1>
+        <span class="brand">FINO</span>
+      </header>
+ 
+      <div class="balance-card">
+        <span class="balance-card__amount">0,00</span>
+        <span class="balance-card__currency">USD</span>
+      </div>
+    </section>
+ 
+    <hr class="divider">
+ 
+    <!-- Add -->
+    <section class="section" id="add">
+      <h2 class="section__title">Add</h2>
+ 
+      <form class="add-form" action="#" method="post">
+        <div class="add-form__row">
+          <input class="field" type="text" placeholder="Enter the amount">
+ 
+          <div class="field field--select">
+            <select>
+              <option>Income</option>
+              <option>Expense</option>
+            </select>
+          </div>
+ 
+          <div class="field field--date">
+            <span>00.00.0000</span>
+            <!-- Calendar icon: 26x26 -->
+            <img src="" alt="">
+          </div>
+        </div>
+ 
+        <input class="field field--note" type="text" placeholder="Add a note (optional)">
+ 
+        <p class="add-form__label">Choose a category</p>
+ 
+        <div class="categories">
+          <label class="category category--food">
+            <input type="radio" name="category" value="food">
+            <span>Food</span>
+          </label>
+          <label class="category category--health">
+            <input type="radio" name="category" value="health" checked>
+            <span>Health</span>
+          </label>
+          <label class="category category--entertainment">
+            <input type="radio" name="category" value="entertainment">
+            <span>Entertainment</span>
+          </label>
+          <label class="category category--shopping">
+            <input type="radio" name="category" value="shopping">
+            <span>Shopping</span>
+          </label>
+          <label class="category category--other">
+            <input type="radio" name="category" value="other">
+            <span>Other</span>
+          </label>
+        </div>
+ 
+        <button class="btn" type="submit">Add</button>
+      </form>
+    </section>
+ 
+    <hr class="divider">
+ 
+   
+ 
+  </main>
+
 
 </body>
 </html>
