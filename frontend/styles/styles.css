@@ -458,3 +458,148 @@ a {
   border-radius: 50%;
 }
  
+/* ===== STATISTICS ===== */
+.section--last {
+  min-height: 60vh;
+}
+ 
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 28px;
+}
+ 
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  height: 110px;
+  padding: 0 24px;
+  background: var(--field-bg);
+  border-radius: 14px;
+}
+ 
+.stat-card--dark {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 28px;
+}
+ 
+.stat-card__label {
+  font-size: 16px;
+  opacity: 0.8;
+}
+ 
+.stat-card__value {
+  font-size: 28px;
+  font-weight: 600;
+}
+ 
+.stat-card__value--plus  { color: #2e8a1c; }
+.stat-card__value--minus { color: var(--red); }
+ 
+.stats__subtitle {
+  margin-bottom: 12px;
+  font-size: 26px;
+  font-weight: 500;
+}
+ 
+.stats-list {
+  margin-bottom: 30px;
+  border-top: 1px solid var(--line);
+}
+ 
+.stat-row {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+ 
+.stat-row__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+ 
+.stat-row__value {
+  font-size: 20px;
+  font-weight: 500;
+}
+ 
+.stat-row__value small {
+  margin-left: 8px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--muted);
+}
+ 
+.bar {
+  height: 10px;
+  background: #eceff3;
+  border-radius: 6px;
+  overflow: hidden;
+}
+ 
+.bar__fill {
+  height: 100%;
+  border-radius: 6px;
+}
+ 
+.bar__fill--food          { background: #e3aaaa; }
+.bar__fill--health        { background: #9fd89f; }
+.bar__fill--entertainment { background: #e8d97f; }
+.bar__fill--shopping      { background: #e5a9ee; }
+.bar__fill--other         { background: #92cde8; }
+ 
+.chart {
+  width: 100%;
+  height: 320px;
+  background: var(--field-bg);
+  border-radius: 28px;
+  overflow: hidden;
+}
+ 
+.chart img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+ 
+/* ===== SMALL SCREENS (sidebar stays visible, just narrower) ===== */
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 190px;
+  }
+ 
+  .sidebar {
+    padding: 24px 20px;
+  }
+ 
+  .main {
+    padding-right: 16px;
+  }
+ 
+  .page-title,
+  .section__title {
+    font-size: 34px;
+  }
+ 
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+ 
+  .filters,
+  .filters--stats {
+    grid-template-columns: 1fr 1fr;
+  }
+ 
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+}
