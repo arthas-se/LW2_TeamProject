@@ -1,0 +1,54 @@
+/* ===== RESET & VARIABLES ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+ 
+:root {
+  --navy: #060b24;
+  --field-bg: #c5cfdb;
+  --field-text: #0a0f26;
+  --placeholder: #5d6a7c;
+  --line: #dcdfe4;
+  --muted: #7b7f87;
+  --red: #a8201a;
+  --green: #3fae29;
+ 
+  --food: #efd8d8;
+  --health: #d6efd6;
+  --entertainment: #f7f1d0;
+  --shopping: #f6dcf9;
+  --other: #d6eef9;
+ 
+  --sidebar-width: 246px;
+  --sidebar-gap: 12px;
+}
+ 
+html {
+  scroll-behavior: smooth;
+}
+ 
+body {
+  font-family: "Noto Sans", Arial, sans-serif;
+  color: var(--navy);
+  background: #fff;
+  line-height: 1.3;
+}
+ 
+img {
+  display: block;
+  object-fit: contain;
+}
+ 
+/* empty images stay invisible until you add a path */
+img[src=""] {
+  visibility: hidden;
+}
+ 
+a {
+  color: inherit;
+  text-decoration: none;
+}
