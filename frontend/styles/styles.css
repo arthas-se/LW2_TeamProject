@@ -188,3 +188,15 @@ a {
   font-size: 44px;
   font-weight: 600;
 }
+
+/* ===== SECTIONS ===== */
+.section {
+  scroll-margin-top: 24px;
+}
+ 
+.section__title {
+  margin-bottom: 16px;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+}
