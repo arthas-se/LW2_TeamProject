@@ -174,3 +174,17 @@ a {
   border: 0;
   background: var(--line);
 }
+
+/* ===== BALANCE ===== */
+.balance-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 156px;
+  padding: 0 34px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 28px;
+  font-size: 44px;
+  font-weight: 600;
+}
