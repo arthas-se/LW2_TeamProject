@@ -270,6 +270,41 @@ a {
   height: 26px;
 }
 
+.field--date {
+  position: relative;
+}
+
+.field--date input {
+  width: 100%;
+  height: 100%;
+  padding-right: 44px;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  outline: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ваша іконка календаря поверх, не блокує кліки */
+.field--date img {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* стандартну іконку браузера ховаємо, але робимо клікабельною на всю ширину поля */
+.field--date input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
 /* ===== ADD FORM ===== */
 .add-form__row {
   display: grid;
