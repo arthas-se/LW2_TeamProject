@@ -279,3 +279,221 @@ function getHistoryList() {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
+/* =========================================================
+   RENDER: BALANCE & HISTORY
+   ========================================================= */
+function renderBalance() {
+  const income  = sum(state.transactions.filter((t) => t.type === 'income'));
+  const expense = sum(state.transactions.filter((t) => t.type === 'expense'));
+  els.balance.textContent = formatNumber(income - expense, true);
+}
+
+function createRow(t) {
+  const row = els.rowTpl.content.firstElementChild.cloneNode(true);
+  const date = new Date(t.date);
+  const isIncome = t.type === 'income';
+
+  row.dataset.id = t.id;
+
+  row.querySelector('.transaction__icon').classList.add(`transaction__icon--${t.category}`);
+  if (ICONS[t.category]) row.querySelector('img').src = ICONS[t.category];
+
+  row.querySelector('.transaction__name').textContent = t.note || CATEGORY_LABELS[t.category];
+
+  const amount = row.querySelector('.transaction__amount');
+  amount.classList.add(isIncome ? 'transaction__amount--plus' : 'transaction__amount--minus');
+  amount.textContent = `${isIncome ? '+' : '-'}${formatNumber(t.amount)} ${CURRENCY}`;
+
+  row.querySelector('.transaction__date').textContent = `${formatDate(date)}, ${formatTime(date)}`;
+  return row;
+}
+
+function setHistoryMessage(text) {
+  const message = document.createElement('p');
+  message.className = 'empty';
+  message.textContent = text;
+  els.history.replaceChildren(message);
+}
+
+function renderHistory() {
+  if (!state.loaded) {
+    setHistoryMessage(state.failed ? 'Could not load transactions' : 'Loading...');
+    return;
+  }
+
+  const list = getHistoryList();
+  if (!list.length) {
+    setHistoryMessage('No transactions found');
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  let lastDay = '';
+
+  for (const t of list) {
+    const day = dayLabel(new Date(t.date));
+    if (day !== lastDay) {
+      const heading = document.createElement('h3');
+      heading.className = 'history__day';
+      heading.textContent = day;
+      fragment.appendChild(heading);
+      lastDay = day;
+    }
+    fragment.appendChild(createRow(t));
+  }
+
+  els.history.replaceChildren(fragment);
+}
+
+/* =========================================================
+   RENDER: STATISTICS
+   ========================================================= */
+function renderStats() {
+  const period = els.sPeriod.value;
+  const type = els.sType.value;
+
+  const inRange = state.transactions.filter((t) => inPeriod(t.date, period));
+  const income  = sum(inRange.filter((t) => t.type === 'income'));
+  const expense = sum(inRange.filter((t) => t.type === 'expense'));
+  const balance = sum(state.transactions.filter((t) => t.type === 'income'))
+                - sum(state.transactions.filter((t) => t.type === 'expense'));
+
+  els.sTotal.textContent    = `${formatNumber(balance)} ${CURRENCY}`;
+  els.sIncome.textContent   = `+${formatNumber(income)} ${CURRENCY}`;
+  els.sExpenses.textContent = `-${formatNumber(expense)} ${CURRENCY}`;
+
+  // "By category": Income -> income only, "Expense" and "All types" -> expenses
+  const breakdownType = type === 'income' ? 'income' : 'expense';
+  const list = inRange.filter((t) => t.type === breakdownType);
+  const total = sum(list);
+
+  for (const row of els.sRows) {
+    const amount = sum(list.filter((t) => t.category === row.dataset.category));
+    const percent = total ? Math.round((amount / total) * 100) : 0;
+
+    row.querySelector('[data-amount]').textContent = formatNumber(amount);
+    row.querySelector('[data-percent]').textContent = `${percent}%`;
+    row.querySelector('[data-bar]').style.width = `${percent}%`;
+  }
+
+  renderChart(inRange, period, type);
+}
+
+/* ---------- chart (inline SVG, no libraries) ---------- */
+function bucketKey(date, period) {
+  return period === 'year' ? `${date.getFullYear()}-${date.getMonth()}` : toInputDate(date);
+}
+
+// the columns of the chart for the selected period
+function buildBuckets(period) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const buckets = [];
+
+  if (period === 'year') {
+    MONTHS.forEach((name, m) => {
+      buckets.push({ key: `${year}-${m}`, label: name, title: `${name} ${year}` });
+    });
+  } else if (period === 'week') {
+    const daysFromMonday = (now.getDay() + 6) % 7;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(year, now.getMonth(), now.getDate() - daysFromMonday + i);
+      buckets.push({ key: toInputDate(d), label: WEEKDAYS[i], title: formatDate(d) });
+    }
+  } else {
+    const days = new Date(year, now.getMonth() + 1, 0).getDate();
+    for (let day = 1; day <= days; day++) {
+      const d = new Date(year, now.getMonth(), day);
+      buckets.push({ key: toInputDate(d), label: String(day), title: formatDate(d) });
+    }
+  }
+  return buckets;
+}
+
+// 1, 2, 5 x 10^n  that is >= value
+function niceMax(value) {
+  if (value <= 0) return 0;
+  const power = 10 ** Math.floor(Math.log10(value));
+  const f = value / power;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * power;
+}
+
+function renderChart(list, period, type) {
+  const showIncome  = type !== 'expense';
+  const showExpense = type !== 'income';
+
+  const buckets = buildBuckets(period);
+  const indexByKey = new Map(buckets.map((b, i) => [b.key, i]));
+  const income  = buckets.map(() => 0);
+  const expense = buckets.map(() => 0);
+
+  for (const t of list) {
+    const i = indexByKey.get(bucketKey(new Date(t.date), period));
+    if (i === undefined) continue;
+    if (t.type === 'income') income[i] += t.amount;
+    else expense[i] += t.amount;
+  }
+
+  const peak = Math.max(0, ...(showIncome ? income : []), ...(showExpense ? expense : []));
+  const max = niceMax(peak);
+
+  if (!max) {
+    els.chart.innerHTML = '<p class="empty">No data for this period</p>';
+    return;
+  }
+
+  const series = [];
+  if (showIncome)  series.push({ name: 'Income',   cls: 'income',  values: income });
+  if (showExpense) series.push({ name: 'Expenses', cls: 'expense', values: expense });
+
+  const W = 710, H = 320;
+  const left = 64, right = 16, top = 40, bottom = 34;
+  const plotW = W - left - right;
+  const plotH = H - top - bottom;
+  const groupW = plotW / buckets.length;
+  const barW = Math.min((groupW * 0.7) / series.length, 22);
+  const labelStep = Math.ceil(buckets.length / 12);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Income and expenses overview">`;
+
+  // grid + y axis labels
+  for (let i = 0; i <= 5; i++) {
+    const y = top + plotH - (plotH * i) / 5;
+    svg += `<line class="chart__grid" x1="${left}" x2="${W - right}" y1="${y}" y2="${y}"/>`;
+    svg += `<text class="chart__label" x="${left - 8}" y="${y + 4}" text-anchor="end">${formatCompact((max * i) / 5)}</text>`;
+  }
+
+  // bars + x axis labels
+  buckets.forEach((bucket, i) => {
+    const groupX = left + i * groupW + (groupW - barW * series.length) / 2;
+
+    series.forEach((s, j) => {
+      const value = s.values[i];
+      if (!value) return;
+      const h = Math.max((value / max) * plotH, 2);
+      svg += `<rect class="chart__bar chart__bar--${s.cls}" x="${groupX + j * barW}" y="${top + plotH - h}" width="${barW}" height="${h}" rx="2">`
+          +  `<title>${s.name}, ${bucket.title}: ${formatNumber(value)} ${CURRENCY}</title></rect>`;
+    });
+
+    if (i % labelStep === 0) {
+      svg += `<text class="chart__label" x="${left + i * groupW + groupW / 2}" y="${H - 10}" text-anchor="middle">${bucket.label}</text>`;
+    }
+  });
+
+  // legend
+  let legendX = left;
+  for (const s of series) {
+    svg += `<rect class="chart__bar chart__bar--${s.cls}" x="${legendX}" y="12" width="12" height="12" rx="2"/>`;
+    svg += `<text class="chart__label" x="${legendX + 18}" y="23">${s.name}</text>`;
+    legendX += 100;
+  }
+
+  els.chart.innerHTML = `${svg}</svg>`;
+}
+
+function renderAll() {
+  renderBalance();
+  renderHistory();
+  renderStats();
+}
+
