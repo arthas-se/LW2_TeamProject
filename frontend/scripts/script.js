@@ -497,3 +497,119 @@ function renderAll() {
   renderStats();
 }
 
+/* =========================================================
+   LOADING DATA
+   ========================================================= */
+async function loadTransactions() {
+  try {
+    state.transactions = await api.getAll();
+    state.failed = false;
+  } catch (error) {
+    console.error(error);
+    state.failed = true;
+    showToast('Could not load transactions');
+  } finally {
+    state.loaded = true;
+    renderAll();
+  }
+}
+
+/* =========================================================
+   ADD FORM
+   ========================================================= */
+function clearErrors() {
+  document.querySelectorAll('.field--error').forEach((el) => el.classList.remove('field--error'));
+}
+
+async function handleSubmit(event) {
+  event.preventDefault();
+  clearErrors();
+
+  const amount = parseAmount(els.amount.value);
+  const checked = els.form.querySelector('input[name="category"]:checked');
+  let valid = true;
+
+  if (!(amount > 0)) {
+    els.amount.classList.add('field--error');
+    valid = false;
+  }
+  if (!els.date.value) {
+    els.dateField.classList.add('field--error');
+    valid = false;
+  }
+  if (!checked) {
+    showToast('Choose a category');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const transaction = {
+    type:     els.type.value,
+    amount,
+    category: checked.value,
+    note:     els.note.value.trim(),
+    date:     buildIsoDate(els.date.value),
+  };
+
+  els.submit.disabled = true;
+  try {
+    await api.create(transaction);
+
+    els.amount.value = '';
+    els.note.value = '';
+    els.date.value = toInputDate(new Date());
+
+    await loadTransactions(); // always show what is really stored in the database
+  } catch (error) {
+    console.error(error);
+    showToast('Could not save the transaction');
+  } finally {
+    els.submit.disabled = false;
+  }
+}
+
+/* =========================================================
+   HISTORY ACTIONS
+   ========================================================= */
+async function handleDelete(id) {
+  if (!confirm('Delete this transaction?')) return;
+
+  try {
+    await api.remove(id);
+    await loadTransactions();
+  } catch (error) {
+    console.error(error);
+    showToast('Could not delete the transaction');
+  }
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function bindEvents() {
+  els.form.addEventListener('submit', handleSubmit);
+
+  // remove the red outline as soon as the user edits the field
+  els.amount.addEventListener('input', () => els.amount.classList.remove('field--error'));
+  els.date.addEventListener('input', () => els.dateField.classList.remove('field--error'));
+
+  // history filters
+  els.hSearch.addEventListener('input', renderHistory);
+  [els.hType, els.hCategory, els.hPeriod].forEach((el) => el.addEventListener('change', renderHistory));
+
+  // statistics filters
+  [els.sPeriod, els.sType].forEach((el) => el.addEventListener('change', renderStats));
+
+  // the "..." button of a row (works for rows created later)
+  els.history.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-action="delete"]');
+    if (button) handleDelete(button.closest('.transaction').dataset.id);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  els.date.value = toInputDate(new Date());
+  bindEvents();
+  renderAll();        // empty state while the data is loading
+  loadTransactions(); // GET /api/expenses
+});
