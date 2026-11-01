@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Money  Tracker</title>
+  <title>Money Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,79 +11,78 @@
 </head>
 <body>
 
-    <!-- ===== SIDEBAR (fixed, never hides) ===== -->
+  <!-- ===== SIDEBAR (fixed, never hides) ===== -->
   <aside class="sidebar">
     <div class="sidebar__logo">
       <!-- Logo: 40x40 -->
-      <img src="./img/logo.png" alt="">
+      <img src="" alt="">
     </div>
- 
+
     <h2 class="sidebar__title">Navigation</h2>
- 
+
     <nav class="sidebar__nav">
       <a href="#add" class="sidebar__link">
         <!-- Icon: 20x20 -->
-        <img src="./img/Plus.png" alt="">
+        <img src="" alt="">
         <span>Add a new one</span>
       </a>
       <a href="#history" class="sidebar__link">
         <!-- Icon: 20x20 -->
-        <img src="./img/Time Machine.png" alt="">
+        <img src="" alt="">
         <span>History</span>
       </a>
       <a href="#statistics" class="sidebar__link">
         <!-- Icon: 20x20 -->
-        <img src="./img/Analytics.png" alt="">
+        <img src="" alt="">
         <span>Statistics</span>
       </a>
     </nav>
   </aside>
- 
+
   <!-- ===== MAIN CONTENT ===== -->
   <main class="main">
- 
+
     <!-- Balance -->
     <section class="balance-section">
       <header class="page-header">
         <h1 class="page-title">My balance</h1>
         <span class="brand">FINO</span>
       </header>
- 
+
       <div class="balance-card">
-        <span class="balance-card__amount">0,00</span>
+        <span class="balance-card__amount" id="balance">0,00</span>
         <span class="balance-card__currency">USD</span>
       </div>
     </section>
- 
+
     <hr class="divider">
- 
+
     <!-- Add -->
     <section class="section" id="add">
       <h2 class="section__title">Add</h2>
- 
-      <form class="add-form" action="#" method="post">
+
+      <form class="add-form" id="add-form" action="#" novalidate>
         <div class="add-form__row">
-          <input class="field" type="text" placeholder="Enter the amount">
- 
+          <input class="field" id="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="Enter the amount">
+
           <div class="field field--select">
-            <select>
-              <option>Income</option>
-              <option>Expense</option>
+            <select id="type">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
             </select>
           </div>
- 
-          <div class="field field--date">
-            <label class="field field--date">
-              <input type="date" name="date">
-              <img src="" alt="">
-            </label>
-          </div>
+
+          <label class="field field--date" id="date-field">
+            <input type="date" id="date">
+            <!-- Calendar icon: 26x26 -->
+            <img src="" alt="">
+          </label>
         </div>
- 
-        <input class="field field--note" type="text" placeholder="Add a note (optional)">
- 
+
+        <input class="field field--note" id="note" type="text" maxlength="100" autocomplete="off" placeholder="Add a note (optional)">
+
         <p class="add-form__label">Choose a category</p>
- 
+
         <div class="categories">
           <label class="category category--food">
             <input type="radio" name="category" value="food">
@@ -106,221 +105,189 @@
             <span>Other</span>
           </label>
         </div>
- 
-        <button class="btn" type="submit">Add</button>
+
+        <button class="btn" id="add-button" type="submit">Add</button>
       </form>
     </section>
- 
+
     <hr class="divider">
- 
-       <!-- History -->
+
+    <!-- History (rows are rendered by script.js from the database) -->
     <section class="section" id="history">
       <h2 class="section__title">History</h2>
- 
+
       <div class="filters">
-        <input class="field" type="text" placeholder="Search transaction">
- 
+        <input class="field" id="history-search" type="text" autocomplete="off" placeholder="Search transaction">
+
         <div class="field field--select">
-          <select>
-            <option>All types</option>
-            <option>Income</option>
-            <option>Expense</option>
+          <select id="history-type">
+            <option value="all">All types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
           </select>
         </div>
- 
+
         <div class="field field--select">
-          <select>
-            <option>All categories</option>
-            <option>Food</option>
-            <option>Health</option>
-            <option>Entertainment</option>
-            <option>Shopping</option>
-            <option>Other</option>
+          <select id="history-category">
+            <option value="all">All categories</option>
+            <option value="food">Food</option>
+            <option value="health">Health</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="shopping">Shopping</option>
+            <option value="other">Other</option>
           </select>
         </div>
- 
+
         <div class="field field--select">
-          <select>
-            <option>This month</option>
-            <option>This week</option>
-            <option>This year</option>
+          <select id="history-period">
+            <option value="month">This month</option>
+            <option value="week">This week</option>
+            <option value="year">This year</option>
           </select>
         </div>
       </div>
 
-            <div class="history">
- 
-        <h3 class="history__day">Today</h3>
- 
-        <div class="transaction">
-          <div class="transaction__icon transaction__icon--food">
-            <!-- Icon: 32x32 -->
-            <img src="./img/French Fries.png" alt="">
-          </div>
-          <span class="transaction__name">Food</span>
-          <div class="transaction__info">
-            <span class="transaction__amount transaction__amount--minus">-0 USD</span>
-            <span class="transaction__date">00.00.0000, 0:00</span>
-          </div>
-          <button class="dots" type="button" aria-label="More"><span></span><span></span><span></span></button>
-        </div>
- 
-        <div class="transaction">
-          <div class="transaction__icon transaction__icon--other">
-            <!-- Icon: 32x32 -->
-            <img src="./img/Money Bill.png" alt="">
-          </div>
-          <span class="transaction__name">Salary</span>
-          <div class="transaction__info">
-            <span class="transaction__amount transaction__amount--plus">+0 USD</span>
-            <span class="transaction__date">00.00.0000, 0:00</span>
-          </div>
-          <button class="dots" type="button" aria-label="More"><span></span><span></span><span></span></button>
-        </div>
- 
-        <h3 class="history__day">Yesterday</h3>
- 
-        <div class="transaction">
-          <div class="transaction__icon transaction__icon--health">
-            <!-- Icon: 32x32 -->
-            <img src="./img/Stethoscope.png" alt="">
-          </div>
-          <span class="transaction__name">Health</span>
-          <div class="transaction__info">
-            <span class="transaction__amount transaction__amount--minus">-0 USD</span>
-            <span class="transaction__date">00.00.0000, 0:00</span>
-          </div>
-          <button class="dots" type="button" aria-label="More"><span></span><span></span><span></span></button>
-        </div>
- 
-      </div>
+      <div class="history" id="history-list"></div>
     </section>
 
-    <hr class="divider"> 
+    <hr class="divider">
 
-        <!-- Statistics -->
+    <!-- Statistics (values are filled in by script.js) -->
     <section class="section section--last" id="statistics">
       <h2 class="section__title">Statistics</h2>
- 
+
       <div class="filters filters--stats">
         <div class="field field--select">
-          <select>
-            <option>This month</option>
-            <option>This week</option>
-            <option>This year</option>
+          <select id="stats-period">
+            <option value="month">This month</option>
+            <option value="week">This week</option>
+            <option value="year">This year</option>
           </select>
         </div>
         <div class="field field--select">
-          <select>
-            <option>All types</option>
-            <option>Income</option>
-            <option>Expense</option>
+          <select id="stats-type">
+            <option value="all">All types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
           </select>
         </div>
       </div>
- 
+
       <div class="stats-cards">
         <div class="stat-card stat-card--dark">
           <span class="stat-card__label">Total balance</span>
-          <span class="stat-card__value">0 USD</span>
+          <span class="stat-card__value" id="stat-total">0 USD</span>
         </div>
         <div class="stat-card">
           <span class="stat-card__label">Income</span>
-          <span class="stat-card__value stat-card__value--plus">+0 USD</span>
+          <span class="stat-card__value stat-card__value--plus" id="stat-income">+0 USD</span>
         </div>
         <div class="stat-card">
           <span class="stat-card__label">Expenses</span>
-          <span class="stat-card__value stat-card__value--minus">-0 USD</span>
+          <span class="stat-card__value stat-card__value--minus" id="stat-expenses">-0 USD</span>
         </div>
       </div>
- 
+
       <h3 class="stats__subtitle">By category</h3>
- 
+
       <div class="stats-list">
- 
-        <div class="stat-row">
+
+        <div class="stat-row" data-category="food">
           <div class="transaction__icon transaction__icon--food">
             <!-- Icon: 32x32 -->
-            <img src="./img/French Fries.png" alt="">
+            <img src="" alt="">
           </div>
           <div class="stat-row__body">
             <div class="stat-row__top">
               <span class="transaction__name">Food</span>
-              <span class="stat-row__value">0 USD <small>0%</small></span>
+              <span class="stat-row__value"><span data-amount>0</span> USD <small data-percent>0%</small></span>
             </div>
-            <div class="bar"><div class="bar__fill bar__fill--food" style="width: 0%"></div></div>
+            <div class="bar"><div class="bar__fill bar__fill--food" data-bar style="width: 0%"></div></div>
           </div>
         </div>
- 
-        <div class="stat-row">
+
+        <div class="stat-row" data-category="health">
           <div class="transaction__icon transaction__icon--health">
             <!-- Icon: 32x32 -->
-            <img src="./img/Stethoscope.png" alt="">
+            <img src="" alt="">
           </div>
           <div class="stat-row__body">
             <div class="stat-row__top">
               <span class="transaction__name">Health</span>
-              <span class="stat-row__value">0 USD <small>0%</small></span>
+              <span class="stat-row__value"><span data-amount>0</span> USD <small data-percent>0%</small></span>
             </div>
-            <div class="bar"><div class="bar__fill bar__fill--health" style="width: 0%"></div></div>
+            <div class="bar"><div class="bar__fill bar__fill--health" data-bar style="width: 0%"></div></div>
           </div>
         </div>
- 
-        <div class="stat-row">
+
+        <div class="stat-row" data-category="entertainment">
           <div class="transaction__icon transaction__icon--entertainment">
             <!-- Icon: 32x32 -->
-            <img src="./img/Musical Note.png" alt="">
+            <img src="" alt="">
           </div>
           <div class="stat-row__body">
             <div class="stat-row__top">
               <span class="transaction__name">Entertainment</span>
-              <span class="stat-row__value">0 USD <small>0%</small></span>
+              <span class="stat-row__value"><span data-amount>0</span> USD <small data-percent>0%</small></span>
             </div>
-            <div class="bar"><div class="bar__fill bar__fill--entertainment" style="width: 0%"></div></div>
+            <div class="bar"><div class="bar__fill bar__fill--entertainment" data-bar style="width: 0%"></div></div>
           </div>
         </div>
- 
-        <div class="stat-row">
+
+        <div class="stat-row" data-category="shopping">
           <div class="transaction__icon transaction__icon--shopping">
             <!-- Icon: 32x32 -->
-            <img src="./img/Shopping Bag Full.png" alt="">
+            <img src="" alt="">
           </div>
           <div class="stat-row__body">
             <div class="stat-row__top">
               <span class="transaction__name">Shopping</span>
-              <span class="stat-row__value">0 USD <small>0%</small></span>
+              <span class="stat-row__value"><span data-amount>0</span> USD <small data-percent>0%</small></span>
             </div>
-            <div class="bar"><div class="bar__fill bar__fill--shopping" style="width: 0%"></div></div>
+            <div class="bar"><div class="bar__fill bar__fill--shopping" data-bar style="width: 0%"></div></div>
           </div>
         </div>
- 
-        <div class="stat-row">
+
+        <div class="stat-row" data-category="other">
           <div class="transaction__icon transaction__icon--other">
             <!-- Icon: 32x32 -->
-            <img src="./img/Money Bill.png" alt="">
+            <img src="" alt="">
           </div>
           <div class="stat-row__body">
             <div class="stat-row__top">
               <span class="transaction__name">Other</span>
-              <span class="stat-row__value">0 USD <small>0%</small></span>
+              <span class="stat-row__value"><span data-amount>0</span> USD <small data-percent>0%</small></span>
             </div>
-            <div class="bar"><div class="bar__fill bar__fill--other" style="width: 0%"></div></div>
+            <div class="bar"><div class="bar__fill bar__fill--other" data-bar style="width: 0%"></div></div>
           </div>
         </div>
- 
+
       </div>
- 
+
       <h3 class="stats__subtitle">Overview</h3>
- 
-      <div class="chart">
-        <!-- Chart image: fills the box (710x320) -->
-        <img src="" alt="">
-      </div>
+
+      <!-- Chart is drawn by script.js (SVG) -->
+      <div class="chart" id="chart"></div>
     </section>
 
- 
   </main>
 
+  <!-- Template for one history row. script.js clones it for every transaction. -->
+  <template id="transaction-template">
+    <div class="transaction">
+      <div class="transaction__icon">
+        <!-- Icon: 32x32 (path is set by script.js, see ICONS) -->
+        <img src="" alt="">
+      </div>
+      <span class="transaction__name"></span>
+      <div class="transaction__info">
+        <span class="transaction__amount"></span>
+        <span class="transaction__date"></span>
+      </div>
+      <button class="dots" type="button" aria-label="Delete transaction" data-action="delete"><span></span><span></span><span></span></button>
+    </div>
+  </template>
 
+  <script src="scripts/script.js"></script>
 </body>
 </html>
