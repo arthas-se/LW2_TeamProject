@@ -37,11 +37,11 @@ const CATEGORY_LABELS = {
    are plain <img> tags in index.html.)
    --------------------------------------------------------- */
 const ICONS = {
-  food:          '', // <-- path to the Food icon
-  health:        '', // <-- path to the Health icon
-  entertainment: '', // <-- path to the Entertainment icon
-  shopping:      '', // <-- path to the Shopping icon
-  other:         '', // <-- path to the Other icon
+  food:          '../img/French Fries.png', // <-- path to the Food icon
+  health:        '../img/Stethoscope.png', // <-- path to the Health icon
+  entertainment: '../img/Musical Note.png', // <-- path to the Entertainment icon
+  shopping:      '../img/Shopping Bag Full.png', // <-- path to the Shopping icon
+  other:         '../img/Money Bill.png', // <-- path to the Other icon
 };
 
 const MONTHS   = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
