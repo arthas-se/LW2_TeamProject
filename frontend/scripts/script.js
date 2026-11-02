@@ -6,7 +6,7 @@
 
 // Backend base URL. Take the port from Properties/launchSettings.json
 // of the API project (the "https" profile), keep the "/api" at the end.
-const API_URL = 'https://localhost:7127/api';
+const API_URL = 'http://localhost:5117/api';
 
 const CURRENCY = 'USD';
 
