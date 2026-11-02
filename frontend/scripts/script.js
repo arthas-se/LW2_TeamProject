@@ -35,6 +35,7 @@ const CATEGORY_LABELS = {
        food: 'img/food.svg',
    (The icons in the sidebar, the calendar and the Statistics rows
    are plain <img> tags in index.html.)
+   finally right path
    --------------------------------------------------------- */
 const ICONS = {
   food:          'img/French Fries.png', // <-- path to the Food icon
@@ -42,6 +43,7 @@ const ICONS = {
   entertainment: 'img/Musical Note.png', // <-- path to the Entertainment icon
   shopping:      'img/Shopping Bag Full.png', // <-- path to the Shopping icon
   other:         'img/Money Bill.png', // <-- path to the Other icon
+
 };
 
 const MONTHS   = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
