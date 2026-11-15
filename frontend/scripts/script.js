@@ -245,11 +245,12 @@ function showToast(message) {
 function inPeriod(isoDate, period) {
   const d = new Date(isoDate);
   const now = new Date();
-
+ 
   if (period === 'week') {
     const daysFromMonday = (now.getDay() + 6) % 7;
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysFromMonday);
-    return d >= start;
+    const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 7); // next Monday, 00:00
+    return d >= start && d < end;
   }
   if (period === 'month') {
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
@@ -260,18 +261,19 @@ function inPeriod(isoDate, period) {
   return true;
 }
 
+
 function getHistoryList() {
   const search   = els.hSearch.value.trim().toLowerCase();
   const type     = els.hType.value;
   const category = els.hCategory.value;
   const period   = els.hPeriod.value;
-
+ 
   return state.transactions
     .filter((t) => {
       if (type !== 'all' && t.type !== type) return false;
       if (category !== 'all' && t.category !== category) return false;
       if (!inPeriod(t.date, period)) return false;
-
+ 
       if (search) {
         const haystack = `${t.note} ${CATEGORY_LABELS[t.category]} ${t.amount}`.toLowerCase();
         if (!haystack.includes(search)) return false;
@@ -280,6 +282,7 @@ function getHistoryList() {
     })
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 }
+
 
 /* =========================================================
    RENDER: BALANCE & HISTORY
